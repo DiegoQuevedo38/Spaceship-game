@@ -2,6 +2,7 @@ package SpaceGame.src.main;
 import javax.swing.JFrame;
 
 import SpaceGame.src.graphics.Assets;
+import SpaceGame.src.input.KeyBoard;
 import SpaceGame.src.states.GameState;
 
 import java.awt.Canvas;
@@ -18,13 +19,14 @@ public class Window extends JFrame implements Runnable{
 
     private BufferStrategy bs;
     private Graphics g; 
-
-    private GameState gameState;
-
+    
     private final int FPS = 60;
     private double TARGETTIME = 1000000000/FPS;
     private double delta = 0;
     private int AVERAGEFPS = FPS;
+    
+    private GameState gameState;
+    private KeyBoard keyBoard;
 
     public Window() {
         setTitle("Astro wars");
@@ -35,6 +37,7 @@ public class Window extends JFrame implements Runnable{
         setVisible(true);
 
         canvas = new Canvas();
+        keyBoard = new KeyBoard();
 
         canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -42,6 +45,7 @@ public class Window extends JFrame implements Runnable{
         canvas.setFocusable(true);
 
         add(canvas);
+        canvas.addKeyListener(keyBoard);
     }
 
     public static void main(String[] args) {
@@ -49,6 +53,7 @@ public class Window extends JFrame implements Runnable{
     }
 
     private void update () {
+        keyBoard.update();
         gameState.update();
     }
 
