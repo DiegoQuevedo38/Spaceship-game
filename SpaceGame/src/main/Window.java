@@ -62,7 +62,6 @@ public class Window extends JFrame implements Runnable{
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g.drawImage(Assets.player, 100, 100, null);
-
         g.drawString(""+AVERAGEFPS, 10, 10);
 
         g.dispose();
