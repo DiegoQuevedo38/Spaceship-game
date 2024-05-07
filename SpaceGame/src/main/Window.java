@@ -2,6 +2,7 @@ package SpaceGame.src.main;
 import javax.swing.JFrame;
 
 import SpaceGame.src.graphics.Assets;
+import SpaceGame.src.states.GameState;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -17,6 +18,8 @@ public class Window extends JFrame implements Runnable{
 
     private BufferStrategy bs;
     private Graphics g; 
+
+    private GameState gameState;
 
     private final int FPS = 60;
     private double TARGETTIME = 1000000000/FPS;
@@ -46,6 +49,7 @@ public class Window extends JFrame implements Runnable{
     }
 
     private void update () {
+        gameState.update();
     }
 
     private void draw (){
@@ -61,7 +65,7 @@ public class Window extends JFrame implements Runnable{
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        g.drawImage(Assets.player, 100, 100, null);
+        gameState.draw(g);
         g.drawString(""+AVERAGEFPS, 10, 10);
 
         g.dispose();
@@ -70,6 +74,7 @@ public class Window extends JFrame implements Runnable{
 
     private void init () {
         Assets.init();
+        gameState = new GameState();
     }
 
     @Override
