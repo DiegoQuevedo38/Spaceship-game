@@ -1,29 +1,44 @@
 package SpaceGame.src.gameObject;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import SpaceGame.src.graphics.Assets;
 import SpaceGame.src.input.KeyBoard;
 import SpaceGame.src.math.Vector2D;
 
-public class Player extends GameObject{
-    public Player (Vector2D position, BufferedImage texture){
-        super(position, texture);
+public class Player extends MovingObject{
+
+    private Vector2D heading;
+
+
+    public Player(Vector2D position, Vector2D speed, BufferedImage texture) {
+        super(position, speed, texture);
+        heading = new Vector2D(0, 1);
     }
 
     @Override
     public void update(){
+
         if(KeyBoard.RIGHT){
-            position.setX(position.getX() + 4);
-        } else if (KeyBoard.LEFT){
-            position.setX(position.getX() - 4);
-        } else if(KeyBoard.UP){
-            position.setY(position.getY() - 4);
-        } else position.setY(position.getY() + 0.5);
+            angle += Math.PI/20;
+        }
+        if(KeyBoard.LEFT){
+            angle -= Math.PI/20;
+        }
+        heading = heading.setDirection(angle - Math.PI/2);
     }
 
     @Override
     public void draw(Graphics g){
-        g.drawImage(texture, (int)position.getX(),  (int)position.getY(), null);
+        Graphics2D g2d = (Graphics2D)g;
+
+        at = AffineTransform.getTranslateInstance(position.getX(), position.getY());
+
+        at.rotate(angle, Assets.player.getWidth()/2, Assets.player.getHeight()/2);
+
+        g2d.drawImage(Assets.player, at, null);
     }
 }
