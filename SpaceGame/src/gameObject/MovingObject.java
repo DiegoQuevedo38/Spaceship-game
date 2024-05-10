@@ -8,12 +8,15 @@ import SpaceGame.src.math.Vector2D;
 public abstract class MovingObject extends GameObject{
     
     protected Vector2D speed;
-    protected AffineTransform at;
-    protected double angle;
-
-    public MovingObject(Vector2D position, Vector2D speed, BufferedImage texture){
-        super (position, texture);
-        this.speed = speed;
-        angle = 0;
-    }
+	protected AffineTransform at;
+	protected double angle;
+	protected double maxVel;
+	
+	public MovingObject(Vector2D position, Vector2D speed, double maxVel, BufferedImage texture) {
+		super(position, texture);
+		this.speed = speed;
+		this.maxVel = maxVel;
+		angle = 0;
+		
+	}
 }
