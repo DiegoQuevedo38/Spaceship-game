@@ -1,4 +1,4 @@
-package SpaceGame.io;
+package SpaceGame.src.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
