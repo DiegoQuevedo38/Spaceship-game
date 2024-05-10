@@ -66,9 +66,9 @@ public class Window extends JFrame implements Runnable{
 	}
 	
 	
-	private void update(float dt){
+	private void update(){
 		keyBoard.update();
-		State.getCurrentState().update(dt);
+		State.getCurrentState().update();
 	}
 
 	private void draw(){
@@ -134,16 +134,17 @@ public class Window extends JFrame implements Runnable{
 			time += (now - lastTime);
 			lastTime = now;
 			
+			
+			
 			if(delta >= 1)
-			{	
-				update((float) (delta * TARGETTIME * 0.000001f));
+			{		
+				update();
 				draw();
 				delta --;
 				frames ++;
 			}
 			if(time >= 1000000000)
 			{
-
 				AVERAGEFPS = frames;
 				frames = 0;
 				time = 0;

@@ -21,10 +21,8 @@ public class Animation {
 		running = true;
 	}
 	
-	public void update(float dt){
-		
-		time += dt;
-		
+	public void update(){
+				
 		if(time > speed){
 			time  = 0;
 			index ++;
@@ -46,9 +44,5 @@ public class Animation {
 	public BufferedImage getCurrentFrame(){
 		return frames[index];
 	}
-	
-	
-	
-	
 	
 }

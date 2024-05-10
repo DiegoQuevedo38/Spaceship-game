@@ -2,8 +2,6 @@ package SpaceGame.src.states;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -11,7 +9,6 @@ import java.util.PriorityQueue;
 import SpaceGame.src.gameObject.Constants;
 import SpaceGame.src.graphics.Assets;
 import SpaceGame.src.graphics.Text;
-import SpaceGame.src.io.JSONParser;
 import SpaceGame.src.io.ScoreData;
 import SpaceGame.src.math.Vector2D;
 import SpaceGame.src.ui.Action;
@@ -51,26 +48,10 @@ public class ScoreState extends State{
 		
 		highScores = new PriorityQueue<ScoreData>(10, scoreComparator);
 		
-		try {
-			ArrayList<ScoreData> dataList = JSONParser.readFile();
-			
-			for(ScoreData d: dataList) {
-				highScores.add(d);
-			}
-			
-			while(highScores.size() > 10) {
-				highScores.poll();
-			}
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
 	@Override
-	public void update(float dt) {
+	public void update() {
 		returnButton.update();
 	}
 
@@ -111,5 +92,4 @@ public class ScoreState extends State{
 		}
 		
 	}
-	
 }

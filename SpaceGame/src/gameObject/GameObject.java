@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import SpaceGame.src.math.Vector2D;
 
 public abstract class GameObject {
-    protected BufferedImage texture;
+	protected BufferedImage texture;
 	protected Vector2D position;
 	
 	public GameObject(Vector2D position, BufferedImage texture)
@@ -15,7 +15,7 @@ public abstract class GameObject {
 		this.texture = texture;
 	}
 	
-	public abstract void update(float dt);
+	public abstract void update();
 	
 	public abstract void draw(Graphics g);
 
@@ -26,4 +26,5 @@ public abstract class GameObject {
 	public void setPosition(Vector2D position) {
 		this.position = position;
 	}
+	
 }

@@ -23,7 +23,7 @@ public class Message {
 			boolean center, Font font) {
 		this.font = font;
 		this.text = text;
-		this.position = new Vector2D(position);
+		this.position = position;
 		this.fade = fade;
 		this.color = color;
 		this.center = center;

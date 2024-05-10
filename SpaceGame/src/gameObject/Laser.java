@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 import SpaceGame.src.math.Vector2D;
 import SpaceGame.src.states.GameState;
 
-
-
 public class Laser extends MovingObject{
 
 	public Laser(Vector2D position, Vector2D speed, double maxVel, double angle, BufferedImage texture, GameState gameState) {
@@ -19,7 +17,7 @@ public class Laser extends MovingObject{
 	}
 
 	@Override
-	public void update(float dt) {
+	public void update() {
 		position = position.add(speed);
 		if(position.getX() < 0 || position.getX() > Constants.WIDTH ||
 				position.getY() < 0 || position.getY() > Constants.HEIGHT){

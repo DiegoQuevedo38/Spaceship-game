@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import SpaceGame.src.graphics.Animation;
 import SpaceGame.src.graphics.Assets;
 import SpaceGame.src.graphics.Sound;
 import SpaceGame.src.input.KeyBoard;
@@ -18,133 +17,56 @@ public class Player extends MovingObject{
 	private Vector2D acceleration;
 
 	private boolean accelerating = false;
-	private long fireRate;
+	private Chronometer fireRate;
 	
 	private boolean spawning, visible;
 	
-	private long spawnTime, flickerTime, shieldTime, doubleScoreTime, fastFireTime, doubleGunTime;
+	private Chronometer spawnTime, flickerTime;
 	
 	private Sound shoot, loose;
-	
-	private boolean shieldOn, doubleScoreOn, fastFireOn, doubleGunOn;;
-	
-	private Animation shieldEffect;
-	
-	private long fireSpeed;
 	
 	public Player(Vector2D position, Vector2D speed, double maxVel, BufferedImage texture, GameState gameState) {
 		super(position, speed, maxVel, texture, gameState);
 		heading = new Vector2D(0, 1);
 		acceleration = new Vector2D();
-		fireRate = 0;
-		spawnTime = 0;
-		flickerTime = 0;
-		shieldTime = 0;
-		fastFireTime = 0;
-		doubleGunTime = 0;
-		
+		fireRate = new Chronometer();
+		spawnTime = new Chronometer();
+		flickerTime = new Chronometer();
 		shoot = new Sound(Assets.playerShoot);
 		loose = new Sound(Assets.playerLoose);
-		
-		shieldEffect = new Animation(Assets.shieldEffect, 80, null);
-		
-		visible = true;
 	}
 	
 	@Override
-	public void update(float dt) 
+	public void update() 
 	{
 		
-		fireRate += dt;
-		
-		if(shieldOn)
-			shieldTime += dt;
-		
-		if(doubleScoreOn)
-			doubleScoreTime += dt;
-		
-		if(fastFireOn) {
-			fireSpeed = Constants.FIRERATE / 2;
-			fastFireTime += dt;
-		}else {
-			fireSpeed = Constants.FIRERATE;
-		}
-		
-		if(doubleGunOn)
-			doubleGunTime += dt;
-		
-		if(shieldTime > Constants.SHIELD_TIME) {
-			shieldTime = 0;
-			shieldOn = false;
-		}
-		
-		if(doubleScoreTime > Constants.DOUBLE_SCORE_TIME) {
-			doubleScoreOn = false;
-			doubleScoreTime = 0;
-		}
-		
-		if(fastFireTime > Constants.FAST_FIRE_TIME) {
-			fastFireOn = false;
-			fastFireTime = 0;
-		}
-		
-		if(doubleGunTime > Constants.DOUBLE_GUN_TIME) {
-			doubleGunOn = false;
-			doubleGunTime = 0;
+		if(!spawnTime.isRunning()) {
+			spawning = false;
+			visible = true;
 		}
 		
 		if(spawning) {
 			
-			flickerTime += dt;
-			spawnTime += dt;
-			
-			if(flickerTime > Constants.FLICKER_TIME) {
+			if(!flickerTime.isRunning()) {
 				
+				flickerTime.run(Constants.FLICKER_TIME);
 				visible = !visible;
-				flickerTime = 0;
-			}
-			
-			if(spawnTime > Constants.SPAWNING_TIME) {
-				spawning = false;
-				visible = true;
+				
 			}
 			
 		}
 		
-		if(KeyBoard.SHOOT &&  fireRate > fireSpeed && !spawning)
-		{
-			
-			if(doubleGunOn) {
-				Vector2D leftGun = getCenter();
-				Vector2D rightGun = getCenter();
-				
-				Vector2D temp = new Vector2D(heading);
-				temp.normalize();
-				temp = temp.setDirection(angle - 1.3f);
-				temp = temp.scale(width);
-				rightGun = rightGun.add(temp);
-				
-				temp = temp.setDirection(angle - 1.9f);
-				leftGun = leftGun.add(temp);
-				
-				Laser l = new Laser(leftGun, heading, Constants.LASER_VEL, angle, Assets.blueLaser, gameState);
-				Laser r = new Laser(rightGun, heading, Constants.LASER_VEL, angle, Assets.blueLaser, gameState);
-				
-				gameState.getMovingObjects().add(0, l);
-				gameState.getMovingObjects().add(0, r);
-				
-			}else {
-				gameState.getMovingObjects().add(0,new Laser(
-						getCenter().add(heading.scale(width)),
-						heading,
-						Constants.LASER_VEL,
-						angle,
-						Assets.blueLaser,
-						gameState
-						));
-			}
-
-			fireRate = 0;
+		if(KeyBoard.SHOOT &&  !fireRate.isRunning() && !spawning)
+		{		
+			gameState.getMovingObjects().add(0,new Laser(
+					getCenter().add(heading.scale(width)),
+					heading,
+					Constants.LASER_VEL,
+					angle,
+					Assets.blueLaser,
+					gameState
+					));
+			fireRate.run(Constants.FIRERATE);
 			shoot.play();
 		}
 		
@@ -186,43 +108,19 @@ public class Player extends MovingObject{
 		if(position.getY() < -height)
 			position.setY(Constants.HEIGHT);
 		
-		if(shieldOn)
-			shieldEffect.update(dt);
 		
+		fireRate.update();
+		spawnTime.update();
+		flickerTime.update();
 		collidesWith();
-	}
-	
-	public void setShield() {
-		if(shieldOn)
-			shieldTime = 0;
-		shieldOn = true;
-	}
-	
-	public void setDoubleScore() {
-		if(doubleScoreOn)
-			doubleScoreTime = 0;
-		doubleScoreOn = true;
-	}
-	
-	public void setFastFire() {
-		if(fastFireOn)
-			fastFireTime = 0;
-		fastFireOn = true;
-	}
-	
-	public void setDoubleGun() {
-		if(doubleGunOn)
-			doubleGunTime = 0;
-		doubleGunOn = true;
 	}
 	
 	@Override
 	public void Destroy() {
 		spawning = true;
-		gameState.playExplosion(position);
-		spawnTime = 0;
+		spawnTime.run(Constants.SPAWNING_TIME);
 		loose.play();
-		if(!gameState.subtractLife(position)) {
+		if(!gameState.subtractLife()) {
 			gameState.gameOver();
 			super.Destroy();
 		}
@@ -243,7 +141,6 @@ public class Player extends MovingObject{
 		if(!visible)
 			return;
 		
-		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		AffineTransform at1 = AffineTransform.getTranslateInstance(position.getX() + width/2 + 5,
@@ -262,37 +159,14 @@ public class Player extends MovingObject{
 		
 		
 		
-		if(shieldOn) {
-			BufferedImage currentFrame = shieldEffect.getCurrentFrame();
-			AffineTransform at3 = AffineTransform.getTranslateInstance(
-					position.getX() - currentFrame.getWidth() / 2 + width/2,
-					position.getY() - currentFrame.getHeight() / 2 + height/2);
-			
-			at3.rotate(angle, currentFrame.getWidth() / 2, currentFrame.getHeight() / 2);
-					
-			g2d.drawImage(shieldEffect.getCurrentFrame(), at3, null);
-		}
-		
 		at = AffineTransform.getTranslateInstance(position.getX(), position.getY());
 		
 		at.rotate(angle, width/2, height/2);
 		
-		if(doubleGunOn)
-			g2d.drawImage(Assets.doubleGunPlayer, at, null);
-		else
-			g2d.drawImage(texture, at, null);
-		
-		/*g2d.setColor(Color.RED);
-		
-		g2d.drawOval(
-				(int)(getCenter().getX() - Constants.SHIELD_DISTANCE / 2),
-				(int)(getCenter().getY() - Constants.SHIELD_DISTANCE / 2),
-				Constants.SHIELD_DISTANCE,
-				Constants.SHIELD_DISTANCE);*/
+		g2d.drawImage(texture, at, null);
 		
 	}
 	
 	public boolean isSpawning() {return spawning;}
-	public boolean isShieldOn() {return shieldOn;}
-	public boolean isDoubleScoreOn() {return doubleScoreOn;}
+	
 }

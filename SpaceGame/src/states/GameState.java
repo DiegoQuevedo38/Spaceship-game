@@ -5,25 +5,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
+import SpaceGame.src.gameObject.Chronometer;
 import SpaceGame.src.gameObject.Constants;
 import SpaceGame.src.gameObject.Message;
 import SpaceGame.src.gameObject.Meteor;
 import SpaceGame.src.gameObject.MovingObject;
 import SpaceGame.src.gameObject.Player;
-import SpaceGame.src.gameObject.PowerUp;
-import SpaceGame.src.gameObject.PowerUpTypes;
 import SpaceGame.src.gameObject.Size;
 import SpaceGame.src.gameObject.Ufo;
 import SpaceGame.src.graphics.Animation;
 import SpaceGame.src.graphics.Assets;
 import SpaceGame.src.graphics.Sound;
-import SpaceGame.src.io.JSONParser;
-import SpaceGame.src.io.ScoreData;
 import SpaceGame.src.math.Vector2D;
-import SpaceGame.src.ui.Action;
 
 public class GameState extends State{
 	public static final Vector2D PLAYER_START_POSITION = new Vector2D(Constants.WIDTH/2 - Assets.player.getWidth()/2,
@@ -41,48 +36,34 @@ public class GameState extends State{
 	private int waves = 1;
 	
 	private Sound backgroundMusic;
-	private long gameOverTimer;
+	private Chronometer gameOverTimer;
 	private boolean gameOver;
 	
-	private long ufoSpawner;
-	private long powerUpSpawner;
-	
+	private Chronometer ufoSpawner;
 	
 	public GameState()
 	{
 		player = new Player(PLAYER_START_POSITION, new Vector2D(),
 				Constants.PLAYER_MAX_VEL, Assets.player, this);
 		
+		gameOverTimer = new Chronometer();
 		gameOver = false;
 		movingObjects.add(player);
 		
 		meteors = 1;
 		startWave();
 		backgroundMusic = new Sound(Assets.backgroundMusic);
-		backgroundMusic.loop();
+		//backgroundMusic.loop();
 		backgroundMusic.changeVolume(-10.0f);
 		
-		gameOverTimer = 0;
-		ufoSpawner = 0;
-		powerUpSpawner = 0;
-		
-		gameOver = false;
-		
+		ufoSpawner = new Chronometer();
+		ufoSpawner.run(Constants.UFO_SPAWN_RATE);
 	}
 	
 	
 	public void addScore(int value, Vector2D position) {
-		
-		Color c = Color.WHITE;
-		String text = "+" + value + " score";
-		if(player.isDoubleScoreOn()) {
-			c = Color.YELLOW;
-			value = value * 2;
-			text = "+" + value + " score" + " (X2)";
-		}
-		
 		score += value;
-		messages.add(new Message(position, true, text, c, false, Assets.fontMed));
+		messages.add(new Message(position, true, "+"+value+" score", Color.WHITE, false, Assets.fontMed));
 	}
 	
 	public void divideMeteor(Meteor meteor){
@@ -111,7 +92,7 @@ public class GameState extends State{
 			movingObjects.add(new Meteor(
 					meteor.getPosition(),
 					new Vector2D(0, 1).setDirection(Math.random()*Math.PI*2),
-					Constants.METEOR_INIT_VEL*Math.random() + 1,
+					Constants.METEOR_VEL*Math.random() + 1,
 					textures[(int)(Math.random()*textures.length)],
 					this,
 					newSize
@@ -137,7 +118,7 @@ public class GameState extends State{
 			movingObjects.add(new Meteor(
 					new Vector2D(x, y),
 					new Vector2D(0, 1).setDirection(Math.random()*Math.PI*2),
-					Constants.METEOR_INIT_VEL*Math.random() + 1,
+					Constants.METEOR_VEL*Math.random() + 1,
 					texture,
 					this,
 					Size.BIG
@@ -193,145 +174,15 @@ public class GameState extends State{
 		
 	}
 
-	private void spawnPowerUp() {
-		
-		final int x = (int) ((Constants.WIDTH - Assets.orb.getWidth()) * Math.random());
-		final int y = (int) ((Constants.HEIGHT - Assets.orb.getHeight()) * Math.random());
-		
-		int index = (int) (Math.random() * (PowerUpTypes.values().length));
-		
-		PowerUpTypes p = PowerUpTypes.values()[index];
-		
-		final String text = p.text;
-		Action action = null;
-		Vector2D position = new Vector2D(x , y);
-		
-		switch(p) {
-		case LIFE:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					
-					lives ++;
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.GREEN,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		case SHIELD:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					player.setShield();
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.DARK_GRAY,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		case SCORE_X2:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					player.setDoubleScore();
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.YELLOW,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		case FASTER_FIRE:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					player.setFastFire();
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.BLUE,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		case SCORE_STACK:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					score += 1000;
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.MAGENTA,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		case DOUBLE_GUN:
-			action = new Action() {
-				@Override
-				public void doAction() {
-					player.setDoubleGun();
-					messages.add(new Message(
-							position,
-							false,
-							text,
-							Color.ORANGE,
-							false,
-							Assets.fontMed
-							));
-				}
-			};
-			break;
-		default:
-			break;
-		}
-		
-		this.movingObjects.add(new PowerUp(
-				position,
-				p.texture,
-				action,
-				this
-				));
-		
-		
-	}
 	
-	public void update(float dt)
+	public void update()
 	{
-		
-		if(gameOver)
-			gameOverTimer += dt;
-		
-		powerUpSpawner += dt;
-		ufoSpawner += dt;
 		
 		for(int i = 0; i < movingObjects.size(); i++) {
 			
 			MovingObject mo = movingObjects.get(i);
 			
-			mo.update(dt);
+			mo.update();
 			if(mo.isDead()) {
 				movingObjects.remove(i);
 				i--;
@@ -341,39 +192,25 @@ public class GameState extends State{
 		
 		for(int i = 0; i < explosions.size(); i++){
 			Animation anim = explosions.get(i);
-			anim.update(dt);
+			anim.update();
 			if(!anim.isRunning()){
 				explosions.remove(i);
 			}
 			
 		}
 		
-		if(gameOverTimer > Constants.GAME_OVER_TIME) {
-			
-			try {
-				ArrayList<ScoreData> dataList = JSONParser.readFile();
-				dataList.add(new ScoreData(score));
-				JSONParser.writeFile(dataList);
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			backgroundMusic.stop();
-			
+		if(gameOver && !gameOverTimer.isRunning()) {
 			State.changeState(new MenuState());
 		}
 		
-		if(powerUpSpawner > Constants.POWER_UP_SPAWN_TIME) {
-			spawnPowerUp();
-			powerUpSpawner = 0;
-		}
 		
-		
-		if(ufoSpawner > Constants.UFO_SPAWN_RATE) {
+		if(!ufoSpawner.isRunning()) {
+			ufoSpawner.run(Constants.UFO_SPAWN_RATE);
 			spawnUfo();
-			ufoSpawner = 0;
 		}
+		
+		gameOverTimer.update();
+		ufoSpawner.update();
 		
 		for(int i = 0; i < movingObjects.size(); i++)
 			if(movingObjects.get(i) instanceof Meteor)
@@ -465,22 +302,10 @@ public class GameState extends State{
 		return player;
 	}
 	
-	public boolean subtractLife(Vector2D position) {
+	public boolean subtractLife() {
 		lives --;
-		
-		Message lifeLostMesg = new Message(
-				position,
-				false,
-				"-1 LIFE",
-				Color.RED,
-				false,
-				Assets.fontMed
-				);
-		messages.add(lifeLostMesg);
-		
 		return lives > 0;
 	}
-	
 	
 	public void gameOver() {
 		Message gameOverMsg = new Message(
@@ -492,6 +317,7 @@ public class GameState extends State{
 				Assets.fontBig);
 		
 		this.messages.add(gameOverMsg);
+		gameOverTimer.run(Constants.GAME_OVER_TIME);
 		gameOver = true;
 	}
 	

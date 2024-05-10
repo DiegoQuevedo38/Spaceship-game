@@ -63,7 +63,7 @@ public class MenuState extends State{
 	
 	
 	@Override
-	public void update(float dt) {
+	public void update() {
 		for(Button b: buttons) {
 			b.update();
 		}

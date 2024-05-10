@@ -1,4 +1,4 @@
-package SpaceGame.src.gameObject;
+/* package SpaceGame.src.gameObject;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -66,3 +66,4 @@ public class PowerUp extends MovingObject {
 	}
 
 }
+ */

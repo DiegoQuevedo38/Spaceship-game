@@ -64,62 +64,62 @@ public class Assets {
 	
 	public static void init()
 	{
-		player = loadImage("/ships/player.png");
-		doubleGunPlayer = loadImage("/ships/doubleGunPlayer.png");
+		player = loadImage("../../res/ships/player.png");
+		doubleGunPlayer = loadImage("../../res/ships/doubleGunPlayer.png");
 		
-		speed = loadImage("/effects/fire08.png");
+		speed = loadImage("../../res/effects/fire08.png");
 		
-		blueLaser = loadImage("/lasers/laserBlue01.png");
+		blueLaser = loadImage("../../res/lasers/laserBlue01.png");
 		
-		greenLaser = loadImage("/lasers/laserGreen11.png");
+		greenLaser = loadImage("../../res/lasers/laserGreen11.png");
 		
-		redLaser = loadImage("/lasers/laserRed01.png");
+		redLaser = loadImage("../../res/lasers/laserRed01.png");
 		
-		ufo = loadImage("/ships/ufo.png");
+		ufo = loadImage("../../res/ships/ufo.png");
 		
-		life = loadImage("/others/life.png");
+		life = loadImage("../../res/others/life.png");
 		
-		fontBig = loadFont("/fonts/futureFont.ttf", 42);
+		fontBig = loadFont("../../res/fonts/futureFont.ttf", 42);
 		
-		fontMed = loadFont("/fonts/futureFont.ttf", 20);
+		fontMed = loadFont("../../res/fonts/futureFont.ttf", 20);
 		
 		for(int i = 0; i < 3; i++)
-			shieldEffect[i] = loadImage("/effects/shield" + (i + 1) +".png"); 
+			shieldEffect[i] = loadImage("../../res/effects/shield" + (i + 1) +".png"); 
 		
 		for(int i = 0; i < bigs.length; i++)
-			bigs[i] = loadImage("/meteors/big"+(i+1)+".png");
+			bigs[i] = loadImage("../../res/meteors/big"+(i+1)+".png");
 		
 		for(int i = 0; i < meds.length; i++)
-			meds[i] = loadImage("/meteors/med"+(i+1)+".png");
+			meds[i] = loadImage("../../res/meteors/med"+(i+1)+".png");
 		
 		for(int i = 0; i < smalls.length; i++)
-			smalls[i] = loadImage("/meteors/small"+(i+1)+".png");
+			smalls[i] = loadImage("../../res/meteors/small"+(i+1)+".png");
 		
 		for(int i = 0; i < tinies.length; i++)
-			tinies[i] = loadImage("/meteors/tiny"+(i+1)+".png");
+			tinies[i] = loadImage("../../res/meteors/tiny"+(i+1)+".png");
 		
 		for(int i = 0; i < exp.length; i++)
-			exp[i] = loadImage("/explosion/"+i+".png");
+			exp[i] = loadImage("../../res/explosion/"+i+".png");
 		
 		for(int i = 0; i < numbers.length; i++)
-			numbers[i] = loadImage("/numbers/"+i+".png");
+			numbers[i] = loadImage("../../res/numbers/"+i+".png");
 		
-		backgroundMusic = loadSound("/sounds/backgroundMusic.wav");
-		explosion = loadSound("/sounds/explosion.wav");
-		playerLoose = loadSound("/sounds/playerLoose.wav");
-		playerShoot = loadSound("/sounds/playerShoot.wav");
-		ufoShoot = loadSound("/sounds/ufoShoot.wav");
-		powerUp = loadSound("/sounds/powerUp.wav");
+		backgroundMusic = loadSound("../../res/sounds/backgroundMusic.wav");
+		explosion = loadSound("../../res/sounds/explosion.wav");
+		playerLoose = loadSound("../../res/sounds/playerLoose.wav");
+		playerShoot = loadSound("../../res/sounds/playerShoot.wav");
+		ufoShoot = loadSound("../../res/sounds/ufoShoot.wav");
+		powerUp = loadSound("../../res/sounds/powerUp.wav");
 		
-		greyBtn = loadImage("/ui/grey_button.png");
-		blueBtn = loadImage("/ui/blue_button.png");
+		greyBtn = loadImage("../../res/ui/grey_button.png");
+		blueBtn = loadImage("../../res/ui/blue_button.png");
 		
-		orb = loadImage("/powers/orb.png");
-		doubleScore = loadImage("/powers/doubleScore.png");
-		doubleGun = loadImage("/powers/doubleGun.png");
-		fastFire = loadImage("/powers/fastFire.png");
-		star = loadImage("/powers/star.png");
-		shield = loadImage("/powers/shield.png");
+		orb = loadImage("../../res/powers/orb.png");
+		doubleScore = loadImage("../../res/powers/doubleScore.png");
+		doubleGun = loadImage("../../res/powers/doubleGun.png");
+		fastFire = loadImage("../../res/powers/fastFire.png");
+		star = loadImage("../../res/powers/star.png");
+		shield = loadImage("../../res/powers/shield.png");
 		
 		// ===========================================================
 		

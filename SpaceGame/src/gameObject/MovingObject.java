@@ -49,47 +49,32 @@ public abstract class MovingObject extends GameObject{
 			double distance = m.getCenter().subtract(getCenter()).getMagnitude();
 			
 			if(distance < m.width/2 + width/2 && movingObjects.contains(this) && !m.Dead && !Dead){
-				objectCollision(this, m);
+				objectCollision(m, this);
 			}
 		}
 	}
 	
-	private void objectCollision(MovingObject a, MovingObject b) {
+	private void objectCollision(MovingObject a, MovingObject b){
 		
-		Player p = null;
-		
-		if(a instanceof Player)
-			p = (Player)a;
-		else if(b instanceof Player)
-			p = (Player)b;
-		
-		if(p != null && p.isSpawning()) 
+		if(a instanceof Player && ((Player)a).isSpawning()) {
 			return;
-		
-		if(a instanceof Meteor && b instanceof Meteor)
+		}
+		if(b instanceof Player && ((Player)b).isSpawning()) {
 			return;
+		}
 		
-		if(!(a instanceof PowerUp || b instanceof PowerUp)){
+		
+		if(!(a instanceof Meteor && b instanceof Meteor)){
+			gameState.playExplosion(getCenter());
 			a.Destroy();
 			b.Destroy();
-			return;
 		}
-		
-		if(p != null){
-			if(a instanceof Player){
-				((PowerUp)b).executeAction();
-				b.Destroy();
-			}else if(b instanceof Player){
-				((PowerUp)a).executeAction();
-				a.Destroy();
-			}
-		}
-		
 	}
+	
 	
 	protected void Destroy(){
 		Dead = true;
-		if(!(this instanceof Laser) && !(this instanceof PowerUp))
+		if(!(this instanceof Laser))
 			explosion.play();
 	}
 	

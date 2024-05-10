@@ -1,4 +1,4 @@
-package SpaceGame.src.gameObject;
+/* package SpaceGame.src.gameObject;
 
 import java.awt.image.BufferedImage;
 
@@ -21,3 +21,4 @@ public enum PowerUpTypes {
 		this.texture = texture;
 	}
 }
+ */

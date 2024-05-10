@@ -21,7 +21,7 @@ public class Ufo extends MovingObject{
 	
 	private boolean following;
 	
-	private long fireRate;
+	private Chronometer fireRate;
 	
 	private Sound shoot;
 	
@@ -31,7 +31,8 @@ public class Ufo extends MovingObject{
 		this.path = path;
 		index = 0;
 		following = true;
-		fireRate = 0;
+		fireRate = new Chronometer();
+		fireRate.run(Constants.UFO_FIRE_RATE);
 		shoot = new Sound(Assets.ufoShoot);
 	}
 	
@@ -58,9 +59,7 @@ public class Ufo extends MovingObject{
 	}
 	
 	@Override
-	public void update(float dt) {
-		
-		fireRate += dt;
+	public void update() {
 		
 		Vector2D pathFollowing;
 		
@@ -83,7 +82,7 @@ public class Ufo extends MovingObject{
 		
 		// shoot
 		
-		if(fireRate > Constants.UFO_FIRE_RATE) {
+		if(!fireRate.isRunning()) {
 			
 			Vector2D toPlayer = gameState.getPlayer().getCenter().subtract(getCenter());
 			
@@ -109,7 +108,7 @@ public class Ufo extends MovingObject{
 			
 			gameState.getMovingObjects().add(0, laser); 
 			
-			fireRate = 0;
+			fireRate.run(Constants.UFO_FIRE_RATE);
 			
 			shoot.play();
 			
@@ -122,12 +121,12 @@ public class Ufo extends MovingObject{
 		angle += 0.05;
 		
 		collidesWith();
+		fireRate.update();
 		
 	}
 	@Override
 	public void Destroy() {
 		gameState.addScore(Constants.UFO_SCORE, position);
-		gameState.playExplosion(position);
 		super.Destroy();
 	}
 	
