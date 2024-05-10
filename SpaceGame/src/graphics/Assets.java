@@ -133,7 +133,7 @@ public class Assets {
 	}
 	public static Font loadFont(String path, int size) {
 		count ++;
-		return Loader.loadSound(path, size);
+		return Loader.loadFont(path, size);
 	}
 	public static Clip loadSound(String path) {
 		count ++;
