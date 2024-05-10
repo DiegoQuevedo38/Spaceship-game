@@ -10,6 +10,7 @@ import SpaceGame.src.graphics.Assets;
 import SpaceGame.src.graphics.Sound;
 import SpaceGame.src.input.KeyBoard;
 import SpaceGame.src.math.Vector2D;
+import SpaceGame.src.states.GameState;
 
 public class Player extends MovingObject{
 	

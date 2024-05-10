@@ -4,7 +4,6 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Graphics;
 
 import SpaceGame.src.graphics.Text;
 import SpaceGame.src.math.Vector2D;
