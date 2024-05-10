@@ -2,7 +2,10 @@ package SpaceGame.src.gameObject;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import SpaceGame.src.graphics.Assets;
+import SpaceGame.src.graphics.Sound;
 import SpaceGame.src.math.Vector2D;
 import SpaceGame.src.states.GameState;
 
