@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import graphics.Assets;
-import graphics.Sound;
-import math.Vector2D;
-import states.GameState;
-import ui.Action;
+import SpaceGame.src.graphics.Assets;
+import SpaceGame.src.graphics.Sound;
+import SpaceGame.src.math.Vector2D;
+import SpaceGame.src.states.GameState;
+import SpaceGame.src.ui.Action;
 
 public class PowerUp extends MovingObject {
 
