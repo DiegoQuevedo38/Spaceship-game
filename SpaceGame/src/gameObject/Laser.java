@@ -12,10 +12,10 @@ import SpaceGame.src.states.GameState;
 
 public class Laser extends MovingObject{
 
-	public Laser(Vector2D position, Vector2D velocity, double maxVel, double angle, BufferedImage texture, GameState gameState) {
+	public Laser(Vector2D position, Vector2D speed, double maxVel, double angle, BufferedImage texture, GameState gameState) {
 		super(position, speed, maxVel, texture, gameState);
 		this.angle = angle;
-		this.speed = velocity.scale(maxVel);
+		this.speed = speed.scale(maxVel);
 	}
 
 	@Override

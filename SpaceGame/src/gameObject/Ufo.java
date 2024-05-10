@@ -25,9 +25,9 @@ public class Ufo extends MovingObject{
 	
 	private Sound shoot;
 	
-	public Ufo(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture,
+	public Ufo(Vector2D position, Vector2D speed, double maxVel, BufferedImage texture,
 			ArrayList<Vector2D> path, GameState gameState) {
-		super(position, velocity, maxVel, texture, gameState);
+		super(position, speed, maxVel, texture, gameState);
 		this.path = path;
 		index = 0;
 		following = true;
@@ -52,9 +52,9 @@ public class Ufo extends MovingObject{
 	}
 	
 	private Vector2D seekForce(Vector2D target) {
-		Vector2D desiredVelocity = target.subtract(getCenter());
-		desiredVelocity = desiredVelocity.normalize().scale(maxVel);
-		return desiredVelocity.subtract(velocity);
+		Vector2D desiredspeed = target.subtract(getCenter());
+		desiredspeed = desiredspeed.normalize().scale(maxVel);
+		return desiredspeed.subtract(speed);
 	}
 	
 	@Override
@@ -71,11 +71,11 @@ public class Ufo extends MovingObject{
 		
 		pathFollowing = pathFollowing.scale(1/Constants.UFO_MASS);
 		
-		velocity = velocity.add(pathFollowing);
+		speed = speed.add(pathFollowing);
 		
-		velocity = velocity.limit(maxVel);
+		speed = speed.limit(maxVel);
 		
-		position = position.add(velocity);
+		position = position.add(speed);
 		
 		if(position.getX() > Constants.WIDTH || position.getY() > Constants.HEIGHT
 				|| position.getX() < -width || position.getY() < -height)

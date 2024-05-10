@@ -5,7 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import SpaceGame.src.graphics.Animation;
 import SpaceGame.src.graphics.Assets;
+import SpaceGame.src.graphics.Sound;
 import SpaceGame.src.input.KeyBoard;
 import SpaceGame.src.math.Vector2D;
 
@@ -29,8 +31,8 @@ public class Player extends MovingObject{
 	
 	private long fireSpeed;
 	
-	public Player(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState) {
-		super(position, velocity, maxVel, texture, gameState);
+	public Player(Vector2D position, Vector2D speed, double maxVel, BufferedImage texture, GameState gameState) {
+		super(position, speed, maxVel, texture, gameState);
 		heading = new Vector2D(0, 1);
 		acceleration = new Vector2D();
 		fireRate = 0;
@@ -160,18 +162,18 @@ public class Player extends MovingObject{
 			accelerating = true;
 		}else
 		{
-			if(velocity.getMagnitude() != 0)
-				acceleration = (velocity.scale(-1).normalize()).scale(Constants.ACC/2);
+			if(speed.getMagnitude() != 0)
+				acceleration = (speed.scale(-1).normalize()).scale(Constants.ACC/2);
 			accelerating = false;
 		}
 		
-		velocity = velocity.add(acceleration);
+		speed = speed.add(acceleration);
 		
-		velocity = velocity.limit(maxVel);
+		speed = speed.limit(maxVel);
 		
 		heading = heading.setDirection(angle - Math.PI/2);
 		
-		position = position.add(velocity);
+		position = position.add(speed);
 		
 		if(position.getX() > Constants.WIDTH)
 			position.setX(0);
@@ -230,7 +232,7 @@ public class Player extends MovingObject{
 	private void resetValues() {
 		
 		angle = 0;
-		velocity = new Vector2D();
+		speed = new Vector2D();
 		position = GameState.PLAYER_START_POSITION;
 	}
 	

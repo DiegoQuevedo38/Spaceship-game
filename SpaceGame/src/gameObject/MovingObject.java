@@ -8,7 +8,7 @@ import SpaceGame.src.states.GameState;
 
 public abstract class MovingObject extends GameObject{
 	
-	protected Vector2D velocity;
+	protected Vector2D speed;
 	protected AffineTransform at;
 	protected double angle;
 	protected double maxVel;
@@ -20,9 +20,9 @@ public abstract class MovingObject extends GameObject{
 	
 	protected boolean Dead;
 	
-	public MovingObject(Vector2D position, Vector2D velocity, double maxVel, BufferedImage texture, GameState gameState) {
+	public MovingObject(Vector2D position, Vector2D speed, double maxVel, BufferedImage texture, GameState gameState) {
 		super(position, texture);
-		this.velocity = velocity;
+		this.speed = speed;
 		this.maxVel = maxVel;
 		this.gameState = gameState;
 		width = texture.getWidth();

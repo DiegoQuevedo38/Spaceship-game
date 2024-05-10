@@ -7,15 +7,15 @@ import SpaceGame.src.math.Vector2D;
 public class Animation {
 	
 	private BufferedImage[] frames;
-	private int velocity;
+	private int speed;
 	private int index;
 	private boolean running;
 	private Vector2D position;
 	private long time;
 	
-	public Animation(BufferedImage[] frames, int velocity, Vector2D position){
+	public Animation(BufferedImage[] frames, int speed, Vector2D position){
 		this.frames = frames;
-		this.velocity = velocity;
+		this.speed = speed;
 		this.position = position;
 		index = 0;
 		running = true;
@@ -25,7 +25,7 @@ public class Animation {
 		
 		time += dt;
 		
-		if(time > velocity){
+		if(time > speed){
 			time  = 0;
 			index ++;
 			if(index >= frames.length){
